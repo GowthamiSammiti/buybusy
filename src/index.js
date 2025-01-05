@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import Cart from "./components/Cart";
 import Orders from "./components/Orders";
 import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter([
@@ -18,11 +19,12 @@ const router = createBrowserRouter([
       { path: "/cart", element: <Cart /> },
       { path: "/orders", element: <Orders /> },
       { path: "/signIn", element: <SignIn /> },
+      { path: "/signUp", element: <SignUp /> },
     ],
   },
 ]);
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <RouterProvider router={router}></RouterProvider>
+  // </React.StrictMode>
 );

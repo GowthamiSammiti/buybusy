@@ -1,28 +1,37 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase.config";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
-const SignIn = () => {
+const SignUp = () => {
   const navigate = useNavigate();
-  const handleSignIn = (e) => {
+  const handleSignUp = (e) => {
     e.preventDefault();
     console.log(e);
+    const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-    verify(email, password);
+    register(email, password);
   };
 
-  const verify = async (email, password) => {
+  const register = async (email, password) => {
     try {
-      const loginCredential = await signInWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      navigate("/");
+
+      if (userCredential) {
+        const loginCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        navigate("/");
+      }
     } catch (error) {
-      alert("User signIn Failed");
+      alert("User Registration Failed");
     }
   };
 
@@ -30,13 +39,28 @@ const SignIn = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          Sign In
+          Sign Up
         </h2>
         <form
           onSubmit={(e) => {
-            handleSignIn(e);
+            handleSignUp(e);
           }}
         >
+          <div className="mb-4">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Name
+            </label>
+            <input
+              required
+              type="text"
+              id="name"
+              placeholder="Enter Name"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-700"
+            />
+          </div>
           <div className="mb-4">
             <label
               htmlFor="email"
@@ -45,6 +69,7 @@ const SignIn = () => {
               Email
             </label>
             <input
+              required
               type="email"
               id="email"
               placeholder="Enter Email"
@@ -59,6 +84,7 @@ const SignIn = () => {
               Password
             </label>
             <input
+              required
               type="password"
               id="password"
               placeholder="Enter Password"
@@ -69,20 +95,12 @@ const SignIn = () => {
             type="submit"
             className="w-full py-2 px-4 rounded-lg text-white font-semibold bg-[#7064e5] hover:bg-[#5d4ed1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7064e5]"
           >
-            Sign In
+            Sign Up
           </button>
         </form>
-        <p className="text-center text-sm text-gray-600 mt-4">
-          <Link
-            to="/signUp"
-            className="text-[#7064e5] hover:underline font-semibold"
-          >
-            SignUp instead
-          </Link>
-        </p>
       </div>
     </div>
   );
 };
 
-export default SignIn;
+export default SignUp;
